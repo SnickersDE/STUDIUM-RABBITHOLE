@@ -4,6 +4,11 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { config as dotenvConfig } from "dotenv";
 import fs from "fs";
+import path from 'path';
+app.use(express.static(path.join(__dirname)));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 dotenvConfig();
 
@@ -60,3 +65,4 @@ app.get("/files", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`✅ Server läuft auf http://localhost:${PORT}`));
+

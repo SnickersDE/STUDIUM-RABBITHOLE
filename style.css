@@ -1,0 +1,70 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8f0;
+  color: #800020; /* Bordeaux */
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #b8860b; /* Gold */
+}
+
+#drop-area {
+  border: 2px dashed #800020;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #fff5e6;
+}
+
+#drop-area p {
+  margin: 10px 0;
+}
+
+#drop-area input[type="file"] {
+  display: none;
+}
+
+#drop-area button {
+  background-color: #800020;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#drop-area button:hover {
+  background-color: #a52a2a;
+}
+
+#pdf-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#pdf-list li {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+#pdf-list li:hover {
+  background-color: #fff2cc;
+}
+
+iframe {
+  border: 2px solid #b8860b;
+  border-radius: 8px;
+  margin-top: 10px;
+}

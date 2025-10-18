@@ -29,7 +29,7 @@ function uploadFiles(files) {
   }
   formData.append('semester', semester);
 
-  fetch('/upload', {
+  fetch('http://localhost:3000', {
     method: 'POST',
     body: formData
   })
@@ -59,3 +59,4 @@ function loadPdfList() {
 
 // Initial laden
 loadPdfList();
+

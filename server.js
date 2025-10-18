@@ -1,50 +1,46 @@
 const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+const cors = require('cors');
+const fs = require('fs-extra');
+const bodyParser = require('body-parser');
+// Optional, falls du Server-seitige Cloudinary Aktionen machen willst
+// const cloudinary = require('cloudinary').v2;
+
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 
-// Ordnerstruktur: uploads/semesterX
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const semester = req.body.semester;
-    const dir = path.join(__dirname, 'uploads', semester);
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+const PDF_FILE = './pdfs.json';
 
-const upload = multer({ storage: storage });
+// --- Optional: Cloudinary Config via Environment Variables ---
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET
+// });
 
-app.use(express.static('public'));
-
-// Upload Endpoint
-app.post('/upload', upload.array('files'), (req, res) => {
-  res.json({ message: 'Upload erfolgreich' });
-});
-
-// PDF Liste Endpoint
-app.get('/pdfs', (req, res) => {
-  const semesters = ['semester1','semester2','semester3','semester4','semester5','semester6'];
-  let pdfs = [];
-
-  semesters.forEach(sem => {
-    const dir = path.join(__dirname, 'uploads', sem);
-    if(fs.existsSync(dir)) {
-      fs.readdirSync(dir).forEach(file => {
-        pdfs.push({
-          name: file,
-          semester: sem,
-          url: `/uploads/${sem}/${file}`
-        });
-      });
-    }
-  });
+// --- GET /pdfs ---
+// Gibt die persistente Liste aller PDFs zurück
+app.get('/pdfs', async (req, res) => {
+  const pdfs = await fs.readJson(PDF_FILE);
   res.json(pdfs);
 });
 
-// Server starten
-app.listen(3000, () => console.log('Server läuft auf http://localhost:3000'));
+// --- POST /add-pdf ---
+// Fügt neue PDFs in die JSON-Liste ein
+app.post('/add-pdf', async (req, res) => {
+  const { name, semester, url } = req.body;
+  if (!name || !semester || !url) {
+    return res.status(400).json({ error: 'Missing data' });
+  }
+
+  const pdfs = await fs.readJson(PDF_FILE);
+  pdfs.push({ name, semester, url });
+  await fs.writeJson(PDF_FILE, pdfs, { spaces: 2 });
+
+  res.json({ success: true });
+});
+
+// --- Server starten ---
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
+

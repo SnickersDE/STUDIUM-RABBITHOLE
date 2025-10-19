@@ -1,40 +1,45 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 import { config as dotenvConfig } from "dotenv";
 import fs from "fs";
 import path from 'path';
-app.use(express.static(path.join(__dirname)));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+import bodyParser from "body-parser";
+import { fileURLToPath } from "url";
+
 });
 
 dotenvConfig();
-
+// Hilfsvariablen für ES-Module (statt __dirname)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Middleware
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
+// Laden des Frontend und Einbindung der Respo Dateien
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'index.html')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html, style.css'));
+
 app.use(express.static("public"));
 
 // Cloudinary Konfiguration
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  cloud_name: process.env.dkt1uwxg7,
+  api_key: process.env.414614911359457
+  api_secret: process.env.mq7xiUOH5nKPcHGQzg1KkMbzBUs
 });
-
-// Multer Setup (lokal temporär)
-const upload = multer({ dest: "tmp/" });
 
 // Upload Endpoint
 app.post("/upload", upload.single("pdf"), async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "raw",
-      folder: "lernsoftware"
+      folder: "lernsoftwareV2"
     });
     // Lokale Temp-Datei löschen
     fs.unlinkSync(req.file.path);
@@ -50,7 +55,7 @@ app.get("/files", async (req, res) => {
   try {
     const resources = await cloudinary.api.resources({
       type: "upload",
-      prefix: "lernsoftware/",
+      prefix: "lernsoftware2V/",
       resource_type: "raw"
     });
     const files = resources.resources.map(f => ({
@@ -65,4 +70,5 @@ app.get("/files", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`✅ Server läuft auf http://localhost:${PORT}`));
+
 

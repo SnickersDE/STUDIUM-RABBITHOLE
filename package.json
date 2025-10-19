@@ -1,0 +1,22 @@
+{
+  "name": "STUDIUM-RABBITHOLE",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SnickersDE/STUDIUM-RABBITHOLE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
